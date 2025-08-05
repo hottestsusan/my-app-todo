@@ -2,6 +2,7 @@ import './App.css';
 
 import React from 'react';
 import Sidebar from './components/Sidebar';
+import SyncIndicator from './components/SyncIndicator';
 import ThemeToggle from './components/ThemeToggle';
 import TodoInput from './components/TodoInput';
 import TodoList from './components/TodoList';
@@ -19,7 +20,10 @@ const App: React.FC = () => {
           <main className="main-content">
             <div className="content-header">
               <h1 className="content-title">今天</h1>
-              <ThemeToggle />
+              <div className="header-actions">
+                <SyncIndicator />
+                <ThemeToggle />
+              </div>
             </div>
             
             <div className="content-body">

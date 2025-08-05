@@ -4,6 +4,12 @@ import { isDueSoon, isOverdue } from '../utils/dateUtils';
 import TodoItem from './TodoItem';
 import { useTodo } from '../context/TodoContext';
 
+// 将isToday函数移到组件外部
+const isToday = (date: Date) => {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+};
+
 const TodoList: React.FC = () => {
   const { todos, currentFilter, searchQuery, clearCompleted } = useTodo();
 
@@ -52,11 +58,6 @@ const TodoList: React.FC = () => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
   }, [todos, currentFilter, searchQuery]);
-
-  const isToday = (date: Date) => {
-    const today = new Date();
-    return date.toDateString() === today.toDateString();
-  };
 
   const getTimeOfDayLabel = (timeOfDay: string) => {
     switch (timeOfDay) {
@@ -173,7 +174,7 @@ const TodoList: React.FC = () => {
             )}
           </div>
           {completedCount > 0 && (
-            <button onClick={clearCompleted} className="clear-completed">
+            <button onClick={() => clearCompleted()} className="clear-completed">
               清除已完成
             </button>
           )}

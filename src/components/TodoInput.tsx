@@ -13,10 +13,23 @@ const TodoInput: React.FC = () => {
   
   const { addTodo, lists } = useTodo();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (text.trim()) {
-      addTodo(text, dueDate, selectedListId || undefined, timeOfDay || undefined);
+      await addTodo({
+        text: text.trim(),
+        completed: false,
+        dueDate: dueDate,
+        listId: selectedListId || undefined,
+        timeOfDay: timeOfDay as any,
+        category: 'today' as any,
+        createdBy: 'current-user',
+        priority: 'medium',
+        tags: [],
+        attachments: [],
+        comments: [],
+        isPublic: false
+      });
       setText('');
       setDueDate(undefined);
       setSelectedListId('');

@@ -3,6 +3,12 @@ import React, { useState } from 'react';
 
 import { useTodo } from '../context/TodoContext';
 
+// 将isToday函数移到组件外部
+const isToday = (date: Date) => {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+};
+
 const Sidebar: React.FC = () => {
   const { 
     todos, 
@@ -32,11 +38,6 @@ const Sidebar: React.FC = () => {
     }
   };
 
-  const isToday = (date: Date) => {
-    const today = new Date();
-    return date.toDateString() === today.toDateString();
-  };
-
   const handleAddList = () => {
     if (newListName.trim()) {
       addList(newListName.trim());
@@ -46,10 +47,38 @@ const Sidebar: React.FC = () => {
   };
 
   const filterOptions = [
-    { id: 'today', name: '今天', icon: Calendar, count: getTaskCount('today') },
-    { id: 'plan', name: '计划', icon: Calendar, count: getTaskCount('plan') },
-    { id: 'all', name: '全部', icon: Folder, count: getTaskCount('all') },
-    { id: 'completed', name: '完成', icon: CheckCircle, count: getTaskCount('completed') }
+    { 
+      id: 'today', 
+      name: '今天', 
+      icon: Calendar, 
+      count: getTaskCount('today'),
+      color: '#3b82f6',
+      description: '今天创建的任务'
+    },
+    { 
+      id: 'plan', 
+      name: '计划', 
+      icon: Calendar, 
+      count: getTaskCount('plan'),
+      color: '#10b981',
+      description: '有截止时间的任务'
+    },
+    { 
+      id: 'all', 
+      name: '全部', 
+      icon: Folder, 
+      count: getTaskCount('all'),
+      color: '#6b7280',
+      description: '所有未完成任务'
+    },
+    { 
+      id: 'completed', 
+      name: '完成', 
+      icon: CheckCircle, 
+      count: getTaskCount('completed'),
+      color: '#f59e0b',
+      description: '已完成的任务'
+    }
   ];
 
   return (
@@ -70,6 +99,7 @@ const Sidebar: React.FC = () => {
 
       {/* 分类筛选 */}
       <div className="filter-section">
+        <h3 className="filter-section-title">分类筛选</h3>
         <div className="filter-grid">
           {filterOptions.map((option) => {
             const Icon = option.icon;
@@ -80,17 +110,31 @@ const Sidebar: React.FC = () => {
                 key={option.id}
                 onClick={() => setCurrentFilter(option.id)}
                 className={`filter-card ${isActive ? 'active' : ''}`}
+                style={{
+                  borderColor: isActive ? option.color : 'var(--border-color)',
+                  backgroundColor: isActive ? `${option.color}15` : 'var(--bg-color)'
+                }}
               >
-                <div className="filter-icon">
+                <div className="filter-icon" style={{ color: isActive ? option.color : '#6b7280' }}>
                   <Icon size={20} />
                   {option.id === 'today' && (
                     <span className="calendar-number">1</span>
                   )}
                 </div>
                 <div className="filter-info">
-                  <span className="filter-name">{option.name}</span>
-                  <span className="filter-count">{option.count}</span>
+                  <span className="filter-name" style={{ color: isActive ? option.color : 'var(--text-color)' }}>
+                    {option.name}
+                  </span>
+                  <span className="filter-count" style={{ color: isActive ? option.color : '#9ca3af' }}>
+                    {option.count} 个任务
+                  </span>
+                  <span className="filter-description">
+                    {option.description}
+                  </span>
                 </div>
+                {isActive && (
+                  <div className="active-indicator" style={{ backgroundColor: option.color }}></div>
+                )}
               </button>
             );
           })}

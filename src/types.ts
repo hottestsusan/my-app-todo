@@ -138,9 +138,10 @@ export interface TodoContextType {
   deleteTodo: (id: string) => Promise<void>;
   toggleTodo: (id: string) => Promise<void>;
   assignTodo: (todoId: string, userId: string) => Promise<void>;
+  clearCompleted: () => Promise<void>;
   
   // 列表操作
-  addList: (list: Omit<TodoList, 'id' | 'taskCount'>) => Promise<void>;
+  addList: (list: Omit<TodoList, 'id' | 'taskCount'> | string) => Promise<void>;
   updateList: (id: string, updates: Partial<TodoList>) => Promise<void>;
   deleteList: (id: string) => Promise<void>;
   
